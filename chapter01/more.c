@@ -1,6 +1,7 @@
 /*
- * more.c - moreのバージョン0.1
+ * more.c - moreのバージョン0.2
  * ファイルを読みだして24行出力したら、一時停止して次のコマンドを待つ
+ * バージョン0.2の機能： コマンドは/dev/ttyから読み出す
  */
 #include <stdio.h>
 #include <stdlib.h>
@@ -9,7 +10,7 @@
 #define LINELEN 512
 
 void do_more(FILE *);
-int  see_moe();
+int  see_moe(FILE *);
 
 int main(int ac, char *av[])
 {
@@ -38,11 +39,16 @@ void do_more(FILE *fp)
 {
   char line[LINELEN];
   int num_of_lines = 0;
-  int see_more(), reply;
+  int see_more(FILE *), reply;
+  FILE *fp_tty;
+
+  fp_tty = fopen("/dev/tty", "r");
+  if (fp_tty == NULL)
+    exit(1);
 
   while (fgets(line, LINELEN, fp)) {
     if (num_of_lines == PAGELEN) {
-      reply = see_more();
+      reply = see_more(fp_tty);
       if (reply == 0)
         break;
 
@@ -60,13 +66,13 @@ void do_more(FILE *fp)
  * メッセージを出力して応答を待つ。先にすすめる行数を返す。
  * "q": No, "スペース": Yes, "CR": 1行
  */
-int see_more()
+int see_more(FILE *cmd)
 {
   int c;
 
   /* vt100では反転表示 */
   printf("\033[7m more? \033[m");
-  while ((c = getchar()) != EOF) {
+  while ((c = getc(cmd)) != EOF) {
     if (c == 'q')
       return 0;
     if (c == ' ')
