@@ -1,45 +1,50 @@
 /*
- * who2.c
- *   - /etc/utmp を読み出し、その中野情報のリストを表示する
+ * who3.c - 読み出しでバッファリングを行うwho
  *   - 空レコードが出力されないようにし、時刻を適切に整形する
+ *   - 入力をバッファリングする(utmplib.cを使う)
  */
 #include <stdio.h>
+#include <sys/types.h>
 #include <utmpx.h>
 #include <fcntl.h>
+#include <time.h>
 #include <unistd.h>
 #include <stdlib.h>
-#include <time.h>
 
-/*
 #define SHOWHOST
-*/
 
-void showtime(long);
 void show_info(struct utmpx *);
+void showtime(time_t);
 
 int main()
 {
   /*
-  struct utmp utbuf;
-  int utmpfd;
+  struct utmp *utbufp,
+              *utmp_next();
 
-  if ((utmpfd = open(UTMP_FILE, O_RDONLY)) == -1) {
+  if (utmp_open(UTMP_FILE) == -1) {
     perror(UTMP_FILE);
     exit(1);
   }
 
-  while (read(utmpfd, &utbuf, sizeof(utbuf)) == sizeof(utbuf)) {
-    show_info(&utbuf);
+  while ((utbufp = utmp_next()) != ((struct utmp *)NULL)) {
+    show_info(utbufp);
   }
-  close(utmpxfd);
+  utmp_close();
   return 0;
   */
-  struct utmpx *utbuf;
+  struct utmpx *utbufp,
+               *utmp_next();
 
-  while ((utbuf = getutxent()) != NULL) {
-    show_info(utbuf);
+  if (utmp_open(UTMPX_FILE) == -1) {
+   perror(UTMPX_FILE);
+   exit(1);
   }
-  endutxent();
+
+  while ((utbufp = utmp_next()) != ((struct utmp *)NULL)) {
+    show_info(utbufp);
+  }
+  utmp_close();
 
   return 0;
 }
