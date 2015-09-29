@@ -1,7 +1,7 @@
 /*
- * sigdemo1.c
- *   - シグナルハンドラの仕組みを示す
- *   - このプログラムを実行してからCTRL+Cを数回押してみよう
+ * sigdemo2.c
+ *   - シグナルを無視する方法を示す
+ *   - CTRL+\を押せばこのプログラムを強制終了できる
  */
 #include <stdio.h>
 #include <signal.h>
@@ -9,13 +9,12 @@
 
 int main(void)
 {
-  void f(int);
-  int i;
+  signal(SIGINT, SIG_IGN);
 
-  signal(SIGINT, f);
-  for (i = 0; i < 5; i++) {
-    printf("Hello\n");
+  printf("you can't stop me!\n");
+  while(1) {
     sleep(1);
+    printf("haha\n");
   }
 
   return 0;
