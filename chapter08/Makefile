@@ -2,7 +2,7 @@ all: clean
 
 clean:
 	rm -f exec1 psh1 forkdemo1 forkdemo2 forkdemo3 \
-	      waitdemo1
+	      waitdemo1 waitdemo2
 
 exec1: exec1.c
 	cc exec1.c -o exec1
@@ -21,3 +21,6 @@ forkdemo3: forkdemo3.c
 
 waitdemo1: waitdemo1.c
 	cc waitdemo1.c -o waitdemo1
+
+waitdemo2: waitdemo2.c
+	cc waitdemo2.c -o waitdemo2
