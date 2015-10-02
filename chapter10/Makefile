@@ -1,7 +1,7 @@
 all: clean
 
 clean:
-	rm -rf listargs stdinredir1 stdinredir2
+	rm -rf listargs stdinredir1 stdinredir2 whotofile
 
 listargs: listargs.c
 	cc listargs.c -o listargs
@@ -11,3 +11,6 @@ stdinredir1: stdinredir1.c
 
 stdinredir2: stdinredir2.c
 	cc stdinredir2.c -o stdinredir2
+
+whotofile: whotofile.c
+	cc whotofile.c -o whotofile
