@@ -2,7 +2,7 @@ all: clean
 
 clean:
 	rm -rf listargs stdinredir1 stdinredir2 whotofile \
-		pipedemo pipedemo2
+		pipedemo pipedemo2 pipe
 
 listargs: listargs.c
 	cc listargs.c -o listargs
@@ -21,3 +21,6 @@ pipedemo: pipedemo.c
 
 pipedemo2: pipedemo2.c
 	cc pipedemo2.c -o pipedemo2
+
+pipe: pipe.c
+	cc pipe.c -o pipe
